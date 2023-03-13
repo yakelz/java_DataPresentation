@@ -2,18 +2,19 @@ package Set.CircularLinkedSet;
 
 public class Set {
     public class Node {
-        public int number;
+        public int value;
         public Node next;
-        public Node(int number, Node next) {
-            this.number = number;
+        public Node(int value, Node next) {
+            this.value = value;
             this.next = next;
         }
     }
 
-    private Node head;
+    private Node tail;
+
 
     public Set(){
-        head = null;
+        tail = null;
     }
 
     // Возвращает множество в котором есть все неповторяющиеся элементы
@@ -45,6 +46,14 @@ public class Set {
 
     // Вставка значения в множество
     public void Insert(int value){
+        // Если tail = null (список пустой)
+            // Добавляем просто элемент
+
+        Node head = tail.next;
+        Node prev = tail;
+        //Проходимся по списку
+            // Если элемент > чем head.value
+                //добавляем элемент
     }
 
     // Удаление элемента из множества
@@ -58,12 +67,14 @@ public class Set {
 
     // Возвращает минимальное значение в множестве
     public int Min(){
-        return 0;
+        //Минимальное значение это начало списка
+        return tail.next.value;
     }
 
     // Возвращает максимальное значение в множестве
     public int Max(){
-        return 0;
+        //Максимальное значение это конец списка
+        return tail.value;
     }
 
     // Возвращает true - если множества одинаковые.
@@ -82,5 +93,7 @@ public class Set {
     public void MakeNull(){
     }
 
-    public void Print(){}
+    public void Print(){
+        //проходимся по каждому элементу
+    }
 }
