@@ -11,16 +11,28 @@ public class Main {
         b.Insert(5);
         b.Insert(8);
         b.Insert(-39);
+        b.Insert(-29);
         b.Print();
-        ArraySet c = a.Union(b);
-        c.Print();
-        System.out.println("@");
+        ArraySet union = a.Union(b);
+        union.binaryPrint();
+        union.Print();
+        union.Delete(8);
+        union.Print();
+        System.out.println("Max: " + union.Max());
+        System.out.println("Min: " + union.Min());
+        ArraySet inter = a.Intersection(b);
+        inter.Print();
 
-        int len = 35 / 32 - (-30 + 1) / 32 + 2;
-        int len2 = (35-(-30)-1)/32 + 2;
-        System.out.println(len + " " + len2);
+        ArraySet n = new ArraySet(-10, 10);
+        ArraySet m = new ArraySet(-100, -80);
+        ArraySet l = n.Intersection(m);
+        l.Print();
+
+        System.out.println(a.Equal(b));
+
+//        ArraySet diff = a.Difference(b);
+//        diff.Print();
 
 
-        a.Intersection(b);
     }
 }

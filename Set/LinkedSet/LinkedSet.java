@@ -14,95 +14,261 @@ public class LinkedSet {
 
     private Node head;
 
+    //default конструктор
     public LinkedSet(){
         head = null;
     }
 
+    //Копирующий конструктор
+    public LinkedSet(LinkedSet input){
+        copySet(input);
+    }
+
+    //Копирующий метод
+    private void copySet(LinkedSet input) {
+        //Если множество пустое
+        if (input.head == null) {
+            head = null;
+            return;
+        }
+        //Копируем значение с головы
+        head = new Node(input.head.value, null);
+        Node current = head;
+
+        //Проходимся по всему input списку
+        Node h = input.head;
+        while (h.next != null) {
+
+            //И копируем значения в исходный список
+            current.next = new Node(h.next.value, null);
+            current = current.next;
+
+            h = h.next;
+        }
+    }
+
     // Возвращает множество в котором есть все неповторяющиеся элементы
     public LinkedSet Union (LinkedSet input) {
-        //проверить this = input - return this
+        // Проверить this = input -> return копию списка
+        if (this == input) {
+            return new LinkedSet(input);
+        }
+        // Если списки пустые -> возвращаем пустой список
+        if (head == null && input.head == null) {
+            return new LinkedSet();
+        }
+        // Если первый список пустой -> Возвращаем второй список
+        if (head == null) {
+            return new LinkedSet(input);
+        }
+        // Если второй список пустой -> Возвращаем первый список
+        if (input.head == null) {
+            return new LinkedSet(this);
+        }
 
         Node currentHead = head;
         Node inputHead = input.head;
 
         //Создаем новый общий список
         LinkedSet union = new LinkedSet();
+
         //Проходимся по обоим спискам одновременно
+        while (currentHead != null && inputHead != null) {
+            // Если элементы равны, добавляем любой из них
+            // И двигаемся дальше по двум спискам сразу
+            if (currentHead.value == inputHead.value) {
+                union.add(currentHead.value);
+                currentHead = currentHead.next;
+                inputHead = inputHead.next;
+                continue;
+            }
+
             // Если элемент из ПЕРВОГО списка меньше, чем элемент из ВТОРОГО списка,
-                // то добавляем его в общий список и двигаемся дальше по ПЕРВОМУ списку
-                    //Проверяем есть ли элемент уже в списке методом Member()
-                    //и вставляем его методом add()
-
+            // то добавляем его в общий список и двигаемся дальше по ПЕРВОМУ списку
+            if (currentHead.value < inputHead.value) {
+                union.add(currentHead.value);
+                currentHead = currentHead.next;
+            }
             // Если элемент из ВТОРОГО списка меньше, чем элемент из ПЕРВОГО списка,
-                // то добавляем его в общий список и двигаемся дальше по ВТОРОМУ списку
-                    //Проверяем есть ли элемент уже в списке методом Member()
-                    //и вставляем его методом add()
-
+            // то добавляем его в общий список и двигаемся дальше по ВТОРОМУ списку
+            else {
+                union.add(inputHead.value);
+                inputHead = inputHead.next;
+            }
+        }
         //Проходимся по первому списку до конца
-            //Проверяем есть ли элемент уже в списке методом Member()
-            //и вставляем его методом add()
+        while (currentHead != null) {
+            union.add(currentHead.value);
+            currentHead = currentHead.next;
+        }
 
         //Проходимся по второму списку до конца
-            //Проверяем есть ли элемент уже в списке методом Member()
-            //и вставляем его методом add()
+        while (inputHead != null) {
+            union.add(inputHead.value);
+            inputHead = inputHead.next;
+        }
 
         return union;
     }
 
     //Возвращает множество общих элементов
     public LinkedSet Intersection(LinkedSet input){
-        //проверить this = input - return this
+        // Проверить this = input -> return копию списка
+        if (this == input) {
+            return new LinkedSet(input);
+        }
+
+        Node currentHead = head;
+        Node inputHead = input.head;
 
         //Создаем новый общий список
         LinkedSet intersect = new LinkedSet();
-        Node currentHead = head;
 
-        // Перебираем элементы первого списка и добавляем те, которые есть во втором списке, в новый общий список
-        // Проходимся по первому списку до конца
-            // Вызываем на input метод Member() чтобы проверить, есть ли элемент первого списка во втором
-                    //Если элемент присутствует во втором списке, добавляем в новый общий список методом add()
+        //Проходимся по обоим спискам одновременно
+        while (currentHead != null && inputHead != null) {
+            // Если элементы равны, добавляем любой из них
+            // И двигаемся дальше по двум спискам сразу
+            if (currentHead.value == inputHead.value) {
+                intersect.add(currentHead.value);
+                currentHead = currentHead.next;
+                inputHead = inputHead.next;
+                continue;
+            }
+
+            // Двигаемся по первому списку
+            if (currentHead.value < inputHead.value) {
+                currentHead = currentHead.next;
+            }
+            // Двигаемся по второму списку
+            else {
+                inputHead = inputHead.next;
+            }
+        }
+
         return intersect;
     }
 
     //Возвращает множество с элементами которых нет в исходном множестве
     public LinkedSet Difference (LinkedSet input) {
-        //проверить this = input - return this
+        //проверить this = input - return копию списка
+        if (this == input) {
+            return new LinkedSet(input);
+        }
+
+        Node currentHead = head;
+        Node inputHead = input.head;
+
 
         //Создаем новый список
         LinkedSet difference = new LinkedSet();
-        Node inputHead = input.head;
-        //Проходимся по второму списку и добавляем значения, если они присутствуют в исходном списке
-            //Вызываем add() для добавления
+
+        //Проходимся по обоим спискам одновременно
+        while (currentHead != null && inputHead != null) {
+
+            if (currentHead.value == inputHead.value) {
+                currentHead = currentHead.next;
+                inputHead = inputHead.next;
+                continue;
+            }
+
+            if (currentHead.value < inputHead.value) {
+                currentHead = currentHead.next;
+            }
+
+            else {
+                difference.add(inputHead.value);
+                inputHead = inputHead.next;
+            }
+        }
+
+        //Проходимся по второму списку до конца
+        while (inputHead != null) {
+            difference.add(inputHead.value);
+            inputHead = inputHead.next;
+        }
+
         return difference;
     }
 
     // Возвращает множество с которым есть все неповторяющиеся элементы
     // Только если множества не пересекаются
+
+    // Тот же самый Union только без проверки на одинаковые элементы
     public LinkedSet Merge(LinkedSet input){
-        // проверить на одинаковые значения через Equal?
-        // вызвать Union()?
-        return null;
+        Node currentHead = head;
+        Node inputHead = input.head;
+
+        //Создаем новый общий список
+        LinkedSet union = new LinkedSet();
+
+        //Проходимся по обоим спискам одновременно
+        while (currentHead != null && inputHead != null) {
+            // Если элемент из ПЕРВОГО списка меньше, чем элемент из ВТОРОГО списка,
+            // то добавляем его в общий список и двигаемся дальше по ПЕРВОМУ списку
+            if (currentHead.value < inputHead.value) {
+                union.add(currentHead.value);
+                currentHead = currentHead.next;
+            }
+            // Если элемент из ВТОРОГО списка меньше, чем элемент из ПЕРВОГО списка,
+            // то добавляем его в общий список и двигаемся дальше по ВТОРОМУ списку
+            else {
+                union.add(inputHead.value);
+                inputHead = inputHead.next;
+            }
+        }
+        //Проходимся по первому списку до конца
+        while (currentHead != null) {
+            union.add(currentHead.value);
+            currentHead = currentHead.next;
+        }
+
+        //Проходимся по второму списку до конца
+        while (inputHead != null) {
+            union.add(inputHead.value);
+            inputHead = inputHead.next;
+        }
+
+        return union;
+    }
+
+    public boolean Member (int value){
+        return isMember(value);
     }
 
     // Возвращает true - если value есть в множестве
     // false - если его нет
-
     // Используется в Union(), Difference(), Intersection(),
     // когда проходимся по списку и проверяем есть ли элмент в множестве
-    public boolean Member(int value){
+    private boolean isMember(int value){
+        // Если список пустой -> false
+        if (head == null) {
+            return false;
+        }
         // Проверить границу
-            // если value меньше head.value - false
-
+        if (value < head.value) {
+            return false;
+        }
         // Проходимся по каждому элементу
-            // Если нашли value - true
-
-        return false;
+        Node h = head;
+        while (h.next != null && h.next.value != value) {
+            h = h.next;
+        }
+        // Если элемент не найден -> false
+        if (h.next == null){
+            return false;
+        }
+        return true;
     }
 
     // Вставка значения в множество
+    // Используется когда пользователь сам в ручную добавляет значения
     public void Insert(int value){
         // проверяем Member(), есть ли значение уже в списке
+        if (isMember(value)){
+            return;
+        }
         // и добавляем методом add();
+        add(value);
     }
 
     // Тоже вставка значения в множестве только без внутренней проверки Member();
@@ -110,31 +276,54 @@ public class LinkedSet {
     // когда добавляем элементы одного списка в созданный общий список
     private void add(int value) {
         //Если список пустой, тогда value становится головой списка
-        //Если value < head.value, то он становится новой головой
-
+        if (head == null) {
+//            System.out.println("список пустой, вставляю: " + value);
+            head = new Node(value, null);
+            return;
+        }
+        //Если новый элемент меньше чем голова, то он становится новой головой
+        if (value < head.value) {
+//            System.out.println("новый элемент: " + value + " меньше чем голова");
+            head = new Node(value, head);
+            return;
+        }
         //Ищем место для вставки
-        //Проходимся пока next != null и next.value < value
+        Node h = head;
+        while (h.next != null && h.next.value < value) {
+            h = h.next;
+        }
         //Вставляем
+        h.next = new Node(value, h.next);
     }
 
     // Удаление элемента из множества
     public void Delete(int value){
         // Если список пустой - return
-
-        // Если head.value = value - то удаляем голову
-
+        if (head == null) {
+            return;
+        }
+        // Если элемент, который нужно удалить, находится в голове списка - то удаляем голову
+        if (head.value == value) {
+            head = head.next;
+            return;
+        }
         // Проходимся по каждому элементу пока не найдем value
-        // Если не нашли - return
-        // Если нашли - удаляем
+        Node h = head;
+        while (h.next != null && h.next.value != value) {
+            h = h.next;
+        }
+        // Если элемент не найден, то ничего не делаем
+        if (h.next == null){
+            return;
+        }
+        // Если нашли, удаляем
+        h.next = h.next.next;
     }
 
     // Присваивание нового множества
     public void Assign(LinkedSet input){
         //копирующий метод
-
-        //Чистим исходное множество
-        head = null;
-        //И копируем все значения с input
+        copySet(input);
     }
 
     // Возвращает минимальное значение в множестве
@@ -173,10 +362,17 @@ public class LinkedSet {
         //Проходимся по каждому списку одновременно и проверяем
         // т.к список упорядоченный, проверяем соответсвующий элмент первого со вторым
         // и если они не равны, сразу выкидываем false
+        while (currentHead != null && inputHead != null) {
+            if (currentHead.value != inputHead.value) {
+                return false;
+            }
+            currentHead = currentHead.next;
+            inputHead = inputHead.next;
+        }
 
         //потом проверяем дошли ли мы до конца (head == null && input head == null)
         //если они оба равны Null и значит возвращаем true
-        return false;
+        return currentHead == null && inputHead == null;
     }
 
     // Возвращает множество, где найдет X
@@ -201,7 +397,7 @@ public class LinkedSet {
         int i = 0;
         while (h != null) {
             System.out.print("[" + i + "] ");
-            System.out.print(h.value + " ");
+            System.out.print(h.value + " " + "\n");
             i++;
             h = h.next;
         }
