@@ -401,9 +401,9 @@ public class ArraySet {
         for (int i = 0; i < array.length; i++) {
             //если ячейка = 0, значит все биты = 0 - continue
             if (array[i] != 0) {
-                //по каждому биту (от 0 до 32)
                 int cell = array[i];
                 int bit = 0;
+                //по каждому биту (от 0 до 32)
                 // сдвигаем вправо пока число не станет равным 1
                 while (cell != 1) {
                     cell >>= 1;
@@ -425,9 +425,9 @@ public class ArraySet {
         for (int i = array.length - 1; i >= 0; i--) {
             //если ячейка = 0, значит все биты = 0 - continue
             if (array[i] != 0) {
-                //по каждому биту (от 0 до 32)
                 int cell = array[i];
                 int bit = 0;
+                //по каждому биту (от 0 до 32)
                 // делим на 2 (берем крайний бит) пока число не станет равным 1
                 while (cell % 2 == 0) {
                     cell >>= 1;
