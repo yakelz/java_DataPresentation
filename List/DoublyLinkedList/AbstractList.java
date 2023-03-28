@@ -25,17 +25,18 @@ public class AbstractList {
     }
 
     public void insert(Element x, Position p) {
+        Element input = new Element(x);
         //если список пустой
         if (head == null) {
             System.out.println("зашел если список пустой");
-            head = new Node(null, x, null);
+            head = new Node(null, input, null);
             tail = head;
             return;
         }
         //после последнего
         if (p.node == null) {
             System.out.println("зашел если после последнего");
-            tail.next = new Node(tail, x, null);
+            tail.next = new Node(tail, input, null);
             tail = tail.next;
             return;
         }
@@ -43,7 +44,7 @@ public class AbstractList {
         //в начало
         if (p.node == head) {
             System.out.println("зашел если в начало");
-            Node temp = new Node (null, x, head);
+            Node temp = new Node (null, input, head);
             head.prev = temp;
             head = temp;
             return;
@@ -53,7 +54,7 @@ public class AbstractList {
         if (p.node == tail) {
             System.out.println("зашел если в tail");
             Node temp = new Node(tail, tail.element, null);
-            tail.element = x;
+            tail.element = input;
             tail.next= temp;
             tail = temp;
             return;
@@ -68,7 +69,7 @@ public class AbstractList {
         System.out.println("Если определенная позиция");
         Node temp = p.node.next;
         p.node.next = new Node(p.node, p.node.element, temp);
-        p.node.element = x;
+        p.node.element = input;
         temp.prev = p.node.next;
     }
 

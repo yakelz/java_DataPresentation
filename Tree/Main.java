@@ -20,7 +20,8 @@ public class Main {
 
     }
 
-    public static void symmetricOrderPrint(Tree t, int root) {
+    //Симетричный обход бинарного дерева
+    public static void symmetricOrderBinaryPrint(Tree t, int root) {
         if (root == -1) return;
         int leftChild = t.leftMostChild(root);
         if (leftChild == -1) {
@@ -33,4 +34,22 @@ public class Main {
         }
 
     }
+
+
+    //Симетричный обход произвольного дерева
+    private static void symmetricOrderPrint(Tree t, int root) {
+        if (root == -1) return;
+        int leftChild = t.leftMostChild(root);
+        if (leftChild != -1) {
+            int rightSibling = t.rightSibling(leftChild);
+            while (rightSibling != -1) {
+                symmetricOrderPrint(t, leftChild);
+                leftChild = rightSibling;
+                rightSibling = t.rightSibling(leftChild);
+            }
+        }
+        System.out.print(root + " ");
+        symmetricOrderPrint(t, leftChild);
+    }
+
 }

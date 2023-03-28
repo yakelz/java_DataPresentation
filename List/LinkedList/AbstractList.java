@@ -22,23 +22,23 @@ public class AbstractList {
         return new Position(null);
     }
     public void insert(Element x, Position p) {
-
+        Element input = new Element(x);
         // Если list пустой
         if (head == null && p.node == null) {
-            head = new Node(x,null);
+            head = new Node(input,null);
             return;
         }
         // Если вставка в конец
         if (p.node == null) {
             Position last = new Position(getLast());
-            last.node.next = new Node(x, null);
+            last.node.next = new Node(input, null);
             return;
         }
 
         //если вставка в голову
         if (p.node == head) {
             System.out.println("head");
-            Node temp = new Node(x, head);
+            Node temp = new Node(input, head);
             head = temp;
             return;
         }
@@ -52,7 +52,7 @@ public class AbstractList {
         //Если определенная позиция
         Node temp = p.node.next;
         p.node.next = new Node(p.node.element, temp);
-        p.node.element = x;
+        p.node.element = input;
     }
 
     private Node getLast() {
@@ -75,6 +75,10 @@ public class AbstractList {
             prev = h;
             h = h.next;
         }
+        if(p.node == null) {
+            return prev;
+        }
+
         return null;
     }
 

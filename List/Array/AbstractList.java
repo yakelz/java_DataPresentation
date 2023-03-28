@@ -19,6 +19,7 @@ public class AbstractList {
 
     //Вставка объекта "Х" в позицию "Р" в список "L"
     public void insert (Element x, Position p){
+        Element input = new Element(x);
         if (last.p == SIZE || p.p == SIZE)
             throw new ArrayIndexOutOfBoundsException("insert(): В списке нету места");
         if (p.p > last.p || p.p < 0)
@@ -27,7 +28,7 @@ public class AbstractList {
         for (int i = last.p; i > p.p ; i--) {
             array[i] = array[i-1];
         }
-        array[p.p] = x;
+        array[p.p] = input;
         last.p++;
     }
 

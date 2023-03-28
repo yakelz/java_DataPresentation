@@ -12,6 +12,15 @@ public class Element {
         }
     }
 
+    public Element (Element input) {
+        for (int i = 0; i < input.name.length ; i++) {
+            this.name[i] = input.name[i];
+        }
+        for (int i = 0; i < input.address.length; i++) {
+            this.address[i] = input.address[i];
+        }
+    }
+
     public Element (String name, String address) {
         this (name.toCharArray(), address.toCharArray());
     }
