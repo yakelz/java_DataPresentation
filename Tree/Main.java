@@ -1,6 +1,6 @@
 package Tree;
 
-import Tree.LeftSonsRightSiblings.Tree;
+import Tree.SonsList.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,6 +14,7 @@ public class Main {
         t1.create('f', t2);
 
         Tree.printArray();
+        t1.inorder(t1.root());
         System.out.println();
         symmetricOrderPrint(t1, t1.root());
 

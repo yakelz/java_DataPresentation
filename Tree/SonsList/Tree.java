@@ -92,7 +92,7 @@ public class Tree {
     //возвращает самого левого ребенка сына узла n в дереве t
     //если n - лист, возвращается нулевой узел.
     public int leftMostChild(int n) {
-        if (array[n].next == null || findParent(n, root) == EMPTY_TREE) {
+        if (array[n].next == null) {
             return EMPTY_TREE;
         }
 
@@ -112,7 +112,7 @@ public class Tree {
         }
 
         Son sibling = array[parent].next;
-        while (sibling.index != n) {
+        while (sibling.index != n && sibling.index != n) {
             sibling = sibling.sibling;
         }
         if (sibling.sibling == null) {
