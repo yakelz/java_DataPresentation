@@ -1,7 +1,5 @@
 package Set.CircularLinkedSet;
 
-import Set.LinkedSet.LinkedSet;
-
 public class Set {
     public class Node {
         public int value;
@@ -14,10 +12,38 @@ public class Set {
 
     private Node tail;
 
-
+    // default конструктор
     public Set(){
         tail = null;
     }
+
+    // Копирующий конструктор
+    public Set(Set input) {
+        copySet(input);
+    }
+    private void copySet(Set input){
+        //Если множество пустое
+        if (input.isEmpty()) {
+            tail = null;
+            return;
+        }
+        //Копируем значение с хвоста
+        tail = new Node(input.tail.value, null);
+        tail.next = tail;
+
+        Node current = tail;
+        //Проходимся по всему input списку
+        Node h = input.tail.next;
+        while (h != input.tail) {
+
+            //И копируем значения в исходный список
+            Node insert = new Node(h.next.value, current.next);
+            current.next = insert;
+
+            h = h.next;
+        }
+    }
+
 
     // Возвращает множество в котором есть все неповторяющиеся элементы
     public Set Union (Set input) {
@@ -43,6 +69,10 @@ public class Set {
     // Возвращает true - если value есть в множестве
     // false - если его нет
     public boolean Member(int value){
+        return isMember(value);
+    }
+
+    private boolean isMember(int value){
         return false;
     }
 
@@ -50,7 +80,7 @@ public class Set {
     public void Insert(int value){
         // Если tail = null (список пустой)
             // Добавляем просто элемент
-        if (tail == null) {
+        if (isEmpty()) {
             tail = new Node(value, null);
             tail.next = tail;
             return;
@@ -74,6 +104,9 @@ public class Set {
             prev = current;
             current = current.next;
         }
+
+        // Проверить значение в ячейке
+
         // Всталяем
         prev.next = new Node(value, current);
     }
@@ -81,7 +114,7 @@ public class Set {
     // Удаление элемента из множества
     public void Delete(int value){
         //Если список пустой - выход.
-        if (tail == null) {
+        if (isEmpty()) {
             System.out.println("Список пустой" + value);
             return;
         }
@@ -111,18 +144,27 @@ public class Set {
 
     // Присваивание нового множества
     public void Assign(Set input){
-
+        // Копирующий метод
+        copySet(input);
     }
 
     // Возвращает минимальное значение в множестве
     public int Min(){
         //Минимальное значение это начало списка
+
+        if (isEmpty()) {
+            throw new RuntimeException("Min(): множество пустое");
+        }
         return tail.next.value;
     }
 
     // Возвращает максимальное значение в множестве
     public int Max(){
         //Максимальное значение это конец списка
+
+        if (isEmpty()) {
+            throw new RuntimeException("Max(): множество пустое");
+        }
         return tail.value;
     }
 
@@ -140,10 +182,14 @@ public class Set {
 
     // Очистить множество
     public void MakeNull(){
+        tail = null;
     }
 
+    private boolean isEmpty(){
+        return tail == null;
+    }
     public void Print(){
-        if (tail == null) {
+        if (isEmpty()) {
             System.out.println("Список пуст");
             return;
         }

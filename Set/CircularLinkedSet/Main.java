@@ -13,5 +13,14 @@ public class Main {
         a.Print();
         a.Insert(123);
         a.Print();
+
+        Set b = new Set(a);
+        b.Print();
+        b.Delete(123);
+        a.Print();
+        b.Print();
+
+        char av = '0';
+        System.out.println((int)av);
     }
 }

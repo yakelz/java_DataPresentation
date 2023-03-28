@@ -78,6 +78,7 @@ public class LinkedSet {
             // И двигаемся дальше по двум спискам сразу
             if (currentHead.value == inputHead.value) {
                 union.add(currentHead.value);
+
                 currentHead = currentHead.next;
                 inputHead = inputHead.next;
                 continue;
@@ -111,12 +112,16 @@ public class LinkedSet {
         return union;
     }
 
-    //Возвращает множество общих элементов
+    // Возвращает множество общих элементов
+    // Cоздать копию и от туда убирать
+    // Первый элемент в копии первого списка ищем во втором
     public LinkedSet Intersection(LinkedSet input){
         // Проверить this = input -> return копию списка
         if (this == input) {
             return new LinkedSet(input);
         }
+
+        //....частные случаи
 
         Node currentHead = head;
         Node inputHead = input.head;
@@ -149,6 +154,7 @@ public class LinkedSet {
     }
 
     //Возвращает множество с элементами которых нет в исходном множестве
+    //Создать копию и Выбрасывать значения?
     public LinkedSet Difference (LinkedSet input) {
         //проверить this = input - return копию списка
         if (this == input) {
@@ -164,17 +170,18 @@ public class LinkedSet {
 
         //Проходимся по обоим спискам одновременно
         while (currentHead != null && inputHead != null) {
-
+            // двигаемся по обоим
             if (currentHead.value == inputHead.value) {
                 currentHead = currentHead.next;
                 inputHead = inputHead.next;
                 continue;
             }
 
+            // двигаемся по первому
             if (currentHead.value < inputHead.value) {
                 currentHead = currentHead.next;
             }
-
+            // вставляем значение и двигаемся по второму
             else {
                 difference.add(inputHead.value);
                 inputHead = inputHead.next;
@@ -261,20 +268,18 @@ public class LinkedSet {
     }
 
     // Вставка значения в множество
-    // Используется когда пользователь сам в ручную добавляет значения
-    public void Insert(int value){
-        // проверяем Member(), есть ли значение уже в списке
-        if (isMember(value)){
+    // Используется когда пользователь в ручную добавляет элементы
+    public void Insert(int value) {
+        if (isMember(value)) {
             return;
         }
-        // и добавляем методом add();
         add(value);
     }
 
-    // Тоже вставка значения в множестве только без внутренней проверки Member();
     // Используется в Union(), Difference(), Intersection(),
     // когда добавляем элементы одного списка в созданный общий список
-    private void add(int value) {
+    // без внутренней проверки есть ли такое значение уже в списке
+    public void add(int value) {
         //Если список пустой, тогда value становится головой списка
         if (head == null) {
 //            System.out.println("список пустой, вставляю: " + value);
@@ -292,6 +297,7 @@ public class LinkedSet {
         while (h.next != null && h.next.value < value) {
             h = h.next;
         }
+
         //Вставляем
         h.next = new Node(value, h.next);
     }
@@ -379,7 +385,13 @@ public class LinkedSet {
     // A и B - непересекающиеся множества
     // Если нет такого элемента, возвращаем пустое множество.
     public LinkedSet Find(LinkedSet input, int x){
-        //Вызвать Member() на обоих списках
+        // Вызвать Member() на обоих множествах
+        if (isMember(x)) {
+            return this;
+        }
+        if (input.isMember(x)) {
+            return input;
+        }
         return null;
     }
 
