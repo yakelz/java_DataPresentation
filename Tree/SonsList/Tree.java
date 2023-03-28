@@ -112,7 +112,7 @@ public class Tree {
         }
 
         Son sibling = array[parent].next;
-        while (sibling.index != n && sibling.index != n) {
+        while (sibling != null && sibling.index != n) {
             sibling = sibling.sibling;
         }
         if (sibling.sibling == null) {
