@@ -50,14 +50,23 @@ public class Map {
         return null;
     }
 
-    public boolean compute(char[] d, Node r){
+    public boolean compute(char[] d, char[] r){
         Node temp = locate(d);
         if (temp != null) {
-            r = temp;
+            r = copyArray(temp.element.address);
             return true;
         }
         return false;
     }
+
+    private char[] copyArray(char[] input){
+        char[] temp = new char[input.length];
+        for (int i = 0; i < input.length; i++) {
+            temp[i] = input[i];
+        }
+        return temp;
+    }
+
     public void print(){
         if(head == null) {
             System.out.println("Map is empty");

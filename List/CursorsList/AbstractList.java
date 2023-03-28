@@ -37,6 +37,8 @@ public class AbstractList {
     }
 
     public void insert(Element x, Position p) {
+        Element input = new Element(x);
+
         //если список полон
         if (SPACE == -1) {
             return;
@@ -45,17 +47,17 @@ public class AbstractList {
         //список пустой
         if (head == -1) {
             head = SPACE;
-            array[head] = new Node(x, -1);
+            array[head] = new Node(input, -1);
         }
         //после последнего
         else if (p.p == -1) {
-            array[SPACE] = new Node(x, -1);
+            array[SPACE] = new Node(input, -1);
             array[getLast()].next = SPACE;
         }
         //вставка в начало
         else if (p.p == head) {
             array[SPACE] = new Node(array[head].element, array[head].next);
-            array[head].element = x;
+            array[head].element = input;
             array[head].next = SPACE;
         }
         else {
@@ -64,7 +66,7 @@ public class AbstractList {
                 return;
             }
             array[SPACE] = new Node(array[p.p].element, array[p.p].next);
-            array[p.p].element = x;
+            array[p.p].element = input;
             array[p.p].next = SPACE;
         }
         SPACE = spaceNext;
