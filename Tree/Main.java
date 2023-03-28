@@ -14,9 +14,9 @@ public class Main {
         t1.create('f', t2);
 
         Tree.printArray();
-        t1.inorder(t1.root());
         System.out.println();
         symmetricOrderPrint(t1, t1.root());
+
 
     }
 
@@ -39,17 +39,20 @@ public class Main {
     //Симетричный обход произвольного дерева
     private static void symmetricOrderPrint(Tree t, int root) {
         if (root == -1) return;
+        //Находим крайнего левого потомка узла root и рекурсивно вызываем метод для него.
         int leftChild = t.leftMostChild(root);
-        if (leftChild != -1) {
-            int rightSibling = t.rightSibling(leftChild);
-            while (rightSibling != -1) {
-                symmetricOrderPrint(t, leftChild);
-                leftChild = rightSibling;
-                rightSibling = t.rightSibling(leftChild);
-            }
-        }
-        System.out.print(root + " ");
         symmetricOrderPrint(t, leftChild);
+        //Выводим метку узла root.
+        System.out.print(t.label(root) + " ");
+
+        //Находим следующего правого соседа узла leftChild и рекурсивно вызываем метод для него и всех его потомков.
+        int rightSibling = t.rightSibling(leftChild);
+
+        //Если есть еще правые соседи узла leftChild, то повторяем для каждого из них.
+        while (rightSibling != -1) {
+            symmetricOrderPrint(t, rightSibling);
+            rightSibling = t.rightSibling(rightSibling);
+        }
     }
 
 }

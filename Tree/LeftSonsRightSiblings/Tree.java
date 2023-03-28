@@ -57,16 +57,17 @@ public class Tree {
         }
 
         int sibling = array[n].rightSibling;
-        while (sibling != n) {
+        while (sibling != n && sibling != -1 ) {
+            if (parent(sibling) == parent) {
+                return sibling;
+            }
             sibling = array[sibling].rightSibling;
-        }
-
-        if (array[sibling].rightSibling == -1) {
-            return EMPTY_TREE;
         }
 
         return array[sibling].rightSibling;
     }
+
+
     public char label(int n) {
         return array[n].label;
     }
