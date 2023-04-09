@@ -53,7 +53,7 @@ public class Map {
     public boolean compute(char[] d, char[] r){
         Node temp = locate(d);
         if (temp != null) {
-            r = copyArray(temp.element.address);
+            r = temp.element.address;
             return true;
         }
         return false;
