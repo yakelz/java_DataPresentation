@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
     private static final String FILE_NAME = "Dictionary/names.txt";
-
+    private static final int NAME_SIZE = 10;
     public static void showHelp() {
         System.out.println("F <имя> - поместить человека в список хороших");
         System.out.println("U <имя> - поместить человека в список плохих");
@@ -18,15 +18,22 @@ public class Main {
         System.out.println("E - выход из программы" + "\n");
     }
 
+    private static String StringResizer(String str, int n) {
+        if (str == null) {
+            return null;
+        }
+        return str.substring(0, Math.min(str.length(), n));
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
-        Dictionary goodGuys = new Dictionary(30);
-        Dictionary badGuys = new Dictionary(30);
+        Dictionary goodGuys = new Dictionary(5);
+        Dictionary badGuys = new Dictionary(5);
 
         FileReader reader = new FileReader(FILE_NAME);
         Scanner scanner = new Scanner(reader);
 
         while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
+            String line = StringResizer(scanner.nextLine(), NAME_SIZE);
             goodGuys.insert(line);
         }
 
@@ -55,8 +62,8 @@ public class Main {
                     break;
                 case "F":
                     if (badGuys.member(name)) {
-                        badGuys.delete(name);
                         goodGuys.insert(name);
+                        badGuys.delete(name);
                         System.out.println(name + " - добавлен в список хороших парней");
                     } else if (badGuys.member(name)) {
                         System.out.println(name + " - уже хороший парень");
@@ -66,8 +73,8 @@ public class Main {
                     break;
                 case "U":
                     if (goodGuys.member(name)) {
-                        goodGuys.delete(name);
                         badGuys.insert(name);
+                        goodGuys.delete(name);
                         System.out.println(name + " - добавлен в список плохих парней");
                     } else if (badGuys.member(name)) {
                         System.out.println(name + " - уже плохой парень");

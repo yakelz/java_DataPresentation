@@ -1,10 +1,5 @@
 package Dictionary.OpenHash;
-
-
 public class Dictionary {
-
-    // Надо как то ограничить размер элементов в списке
-
     private class Node {
         char[] name;
         Node next;

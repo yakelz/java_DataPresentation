@@ -30,8 +30,8 @@ public class Main {
 
         System.out.println(a.Equal(b));
 
-//        ArraySet diff = a.Difference(b);
-//        diff.Print();
+        ArraySet diff = a.Difference(b);
+        diff.Print();
 
 
     }
