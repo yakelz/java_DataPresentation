@@ -258,20 +258,25 @@ public class ArraySet {
 
         // Копируем ЯЧЕЙКИ первого массива
         for (int i = 0; i < input.array.length; i++) {
-            difference.array[i] = array[i];
+            difference.array[i] = input.array[i];
         }
 
+        // Находим общее начало
+        int s = this.x > input.x ?
+                this.x :
+                input.x;
         // Находим смещение первого массива относительно второго
-        int start = this.searchIndex(input.x);
+        int start1 = this.searchIndex(s);
+        int start2 = input.searchIndex(s);
         // Минимум от длины массивов
-        int end = array.length > input.array.length ?
-                input.array.length :
-                array.length;
+        int end = input.array.length - start2 > this.array.length - start1 ?
+                this.array.length - start1 :
+                input.array.length - start2;
 
         // Чтобы найти биты, которых нет в input
         // Инвертируем биты исходного массива (~) и умножаем на биты Input (&)
         for (int i = 0; i < end; i++) {
-            difference.array[start + i] = (array[start + i] & ~input.array[i]);
+            difference.array[start2 + i] = input.array[start2 + i] & ~this.array[start1 + i];
         }
         //возвращаем новый массив
         return difference;

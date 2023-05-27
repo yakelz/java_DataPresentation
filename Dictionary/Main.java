@@ -18,6 +18,7 @@ public class Main {
         System.out.println("E - выход из программы" + "\n");
     }
 
+    // Подрезает имя до 10 символов
     private static String StringResizer(String str, int n) {
         if (str == null) {
             return null;
@@ -26,8 +27,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Dictionary goodGuys = new Dictionary(5);
-        Dictionary badGuys = new Dictionary(5);
+        Dictionary goodGuys = new Dictionary(30);
+        Dictionary badGuys = new Dictionary(30);
 
         FileReader reader = new FileReader(FILE_NAME);
         Scanner scanner = new Scanner(reader);

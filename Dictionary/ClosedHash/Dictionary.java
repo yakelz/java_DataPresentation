@@ -1,9 +1,5 @@
 package Dictionary.ClosedHash;
 
-import java.util.Arrays;
-
-// Не работает insert нормально
-
 public class Dictionary {
     // Вместимость массива по умолчанию
     private static int CAPACITY = 10;
@@ -33,7 +29,6 @@ public class Dictionary {
         for (int i = 0; i < input.length; i++) {
             result += input[i];
         }
-//        System.out.println("Result: " + result);
         return result % CAPACITY;
     }
 
@@ -54,8 +49,7 @@ public class Dictionary {
     public void insert(String key) {
         // Если нет места в массиве
         if (!hasSpace()) {
-//            throw new RuntimeException("insert(): Нет места для вставки");
-            return;
+            throw new RuntimeException("insert(): Нет места для вставки");
         }
 
         // Перевод String -> Char[]
@@ -63,28 +57,10 @@ public class Dictionary {
         // Хэш индекс
         int index = hashFunction(input);
 
-        //Если Хэш индекс пустой - сразу вставляем
+        //Если массив по Хэш индексу пустой - сразу вставляем
         if (array[index] == null) {
             array[index] = input;
             size++;
-            return;
-        }
-
-        // Если удаленный - ищем этот элемент
-        if (array[index][0] == DELETED) {
-            // Запускаем метод поиска места (он проверит есть ли у нас такой элемент уже или нет)
-            int space = findSpace(index, input);
-            if (space == -1) {
-                return;
-            }
-            array[index] = input;
-            size++;
-            return;
-        }
-
-        // Если в нужной ячейке стоит уже нужный элемент
-        if (compareArrays(array[index], input)) {
-            System.out.println("Одинаковые элементы");
             return;
         }
 
@@ -108,25 +84,48 @@ public class Dictionary {
     private int findSpace(int startIndex, char[] input){
         int i = 0;
         int space = linearHashFunction(startIndex, ++i);
-        while (array[space] != null && array[space][0] != DELETED ) {
+        while (array[space] != null) {
+            System.out.println("Смотрю место: " + space);
             // Пока ищем сразу же проверяем ячейки
             // Если находит одинаковый элемент - возвращает -1;
             if (compareArrays(array[space], input)) {
                 return -1;
             }
-            space = linearHashFunction(startIndex, ++i);
 
-            // Если место не найдено
+            // Если место удалено, мы его сохраняем
+            // и проходимся по оставшимся элементам,
+            // чтобы убедиться, что такого элемента больше нет
+            if(array[space][0] == DELETED) {
+                int deletedSpace = space;
+                while (array[space] != null) {
+                    // Если находит одинаковый элемент - возвращает -1;
+                    if (compareArrays(array[space], input)) {
+                        return -1;
+                    }
+                    space = linearHashFunction(startIndex, ++i);
+                    // Если мы пришли обратно, то одинакового элемента нет
+                    // и можем вставлять в сохраненную (удаленную) ячейку
+                    if (space == startIndex) {
+                        return deletedSpace;
+                    }
+                }
+            }
+            space = linearHashFunction(startIndex, ++i);
             if (space == startIndex) {
                 return -1;
             }
         }
+        System.out.println("Возвращаю: " + space);
         return space;
     }
 
     // По символьное сравнение массивов (для удаления элемента)
     private boolean compareArrays(char[] a, char[] b){
-        for (int i = 0; i < b.length; i++) {
+        // Если массивы разного размера, то даже сравнивать не нужно - они не равны
+        if (a.length != b.length) {
+            return false;
+        }
+        for (int i = 0; i < a.length; i++) {
             if (a[i] != b[i]) {
                 return false;
             }
