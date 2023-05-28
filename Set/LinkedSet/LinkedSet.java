@@ -121,8 +121,6 @@ public class LinkedSet {
             return new LinkedSet(input);
         }
 
-        //....частные случаи
-
         Node currentHead = head;
         Node inputHead = input.head;
 
@@ -282,13 +280,11 @@ public class LinkedSet {
     public void add(int value) {
         //Если список пустой, тогда value становится головой списка
         if (head == null) {
-//            System.out.println("список пустой, вставляю: " + value);
             head = new Node(value, null);
             return;
         }
         //Если новый элемент меньше чем голова, то он становится новой головой
         if (value < head.value) {
-//            System.out.println("новый элемент: " + value + " меньше чем голова");
             head = new Node(value, head);
             return;
         }

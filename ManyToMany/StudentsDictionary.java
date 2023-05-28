@@ -1,25 +1,25 @@
-package Dictionary.ClosedHash;
+package ManyToMany;
 
-public class Dictionary {
+public class StudentsDictionary {
     // Вместимость массива по умолчанию
     private int CAPACITY = 10;
     // Массив символьных массивов
-    public char[][] array;
+    public Student[] array;
     // Символ удаленного элемента
-    private final char DELETED = '0';
+    private final String DELETED = "0";
 
     // Размер массива
     private int size = 0;
 
     // default конструктор
-    public Dictionary(){
-        array = new char[CAPACITY][];
+    public StudentsDictionary(){
+        array = new Student[CAPACITY];
     }
 
     // Конструктор с заданной вместимостью
-    public Dictionary(int capacity){
+    public StudentsDictionary(int capacity){
         this.CAPACITY = capacity;
-        array = new char[CAPACITY][];
+        array = new Student[CAPACITY];
     }
 
     // Функция хеширования
@@ -46,24 +46,22 @@ public class Dictionary {
 
 
     // Вставить
-    public void insert(String key) {
+    public void insert(Student key) {
         // Если нет места в массиве
         if (!hasSpace()) {
             throw new RuntimeException("insert(): Нет места для вставки");
         }
 
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
         // Хэш индекс
-        int index = hashFunction(input);
+        int index = hashFunction(key.name.toCharArray());
 
         // Если объект другой - ищем свободное место
-        int space = findSpace(index, input);
+        int space = findSpace(index, key.name);
         if (space == -1) {
             return;
         }
         // Вставляем элемент
-        array[space] = input;
+        array[space] = key;
         size++;
     }
 
@@ -74,24 +72,24 @@ public class Dictionary {
     // Если находит одинаковый элемент - возвращает -1;
     // Если места нет - возвращает -1;
     // Возвращает место для вставки
-    private int findSpace(int startIndex, char[] input){
+    private int findSpace(int startIndex, String input){
         int i = 0;
         int space = linearHashFunction(startIndex, ++i);
         while (array[space] != null) {
             // Пока ищем сразу же проверяем ячейки
             // Если находит одинаковый элемент - возвращает -1;
-            if (compareArrays(array[space], input)) {
+            if (array[space].name.equals(input)) {
                 return -1;
             }
 
             // Если место удалено, мы его сохраняем
             // и проходимся по оставшимся элементам,
             // чтобы убедиться, что такого элемента больше нет
-            if(array[space][0] == DELETED) {
+            if(array[space].name.equals(DELETED)) {
                 int deletedSpace = space;
                 while (array[space] != null) {
                     // Если находит одинаковый элемент - возвращает -1;
-                    if (compareArrays(array[space], input)) {
+                    if (array[space].name.equals(input)) {
                         return -1;
                     }
                     space = linearHashFunction(startIndex, ++i);
@@ -110,32 +108,18 @@ public class Dictionary {
         return space;
     }
 
-    // По символьное сравнение массивов (для удаления элемента)
-    private boolean compareArrays(char[] a, char[] b){
-        // Если массивы разного размера, то даже сравнивать не нужно - они не равны
-        if (a.length != b.length) {
-            return false;
-        }
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] != b[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     // Удалить
-    public void delete(String key) {
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
+    public void delete(String input) {
+
         // Первый хэш индекс
-        int start = hashFunction(input);
+        int start = hashFunction(input.toCharArray());
 
         // Сразу удаляем если по хэш индексу находится нужный элемент
         // Проверяем, что ячейка не пустая и не удаленная
         // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && array[start][0] != DELETED && compareArrays(array[start], input)) {
-            array[start][0] = DELETED;
+        if (array[start] != null && !array[start].name.equals(DELETED) && array[start].name.equals(input)) {
+            array[start].name = DELETED;
             size--;
             return;
         }
@@ -148,8 +132,8 @@ public class Dictionary {
         while (array[next] != null) {
 
             // Если ячейка не удаленная, и это нужный элемент - удаляем
-            if (array[next][0] != DELETED && compareArrays(array[next], input)) {
-                array[next][0] = DELETED;
+            if (!array[next].name.equals(DELETED) && array[next].name.equals(input)) {
+                array[next].name = DELETED;
                 size--;
                 return;
             }
@@ -166,18 +150,16 @@ public class Dictionary {
         }
     }
 
-    public boolean member(String key) {
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
+    public Student findStudent(String input) {
 
         // Первый хэш индекс
-        int start = hashFunction(input);
+        int start = hashFunction(input.toCharArray());
 
         // Сразу true если по хэш индексу находится нужный элемент
         // Проверяем, что ячейка не пустая и не удаленная
         // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && array[start][0] != DELETED &&  compareArrays(array[start], input)) {
-            return true;
+        if (array[start] != null && !array[start].name.equals(DELETED) && array[start].name.equals(input)) {
+            return array[start];
         }
 
         // Следующий индекс после хэш индекса
@@ -188,8 +170,8 @@ public class Dictionary {
         while (array[next] != null) {
 
             // Если ячейка не удаленная, и это нужный элемент - true
-            if (array[next][0] != DELETED && compareArrays(array[next], input)) {
-                return true;
+            if (!array[next].name.equals(DELETED) && array[next].name.equals(input)) {
+                return array[next];
             }
 
             //Следующий элемент
@@ -200,7 +182,7 @@ public class Dictionary {
                 break;
             }
         }
-        return false;
+        return null;
     }
 
     public void print() {
@@ -208,10 +190,10 @@ public class Dictionary {
             System.out.print(i + ": ");
             if (array[i] == null) {
                 System.out.println("null");
-            } else if (array[i][0] == DELETED) {
+            } else if (array[i].name == DELETED) {
                 System.out.println("DELETED");
             } else {
-                System.out.println(array[i]);
+                System.out.println(array[i].name);
             }
         }
     }

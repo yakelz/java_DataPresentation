@@ -1,6 +1,6 @@
 package Dictionary;
 
-import Dictionary.OpenHash.Dictionary;
+import Dictionary.ClosedHash.Dictionary;
 
 public class Test {
 

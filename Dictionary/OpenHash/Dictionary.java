@@ -32,7 +32,7 @@ public class Dictionary {
         }
     }
 
-    public static int CAPACITY = 10;
+    public int CAPACITY = 10;
     public Node[] array;
 
     // default конструктор
