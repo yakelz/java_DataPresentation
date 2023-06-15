@@ -10,14 +10,14 @@ public class Database {
     }
 
     // добавить студента на конкретный курс
-    public void addStudentToCourse(String student, String course){
+    public void addStudentToCourse(String student, int courseId){
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(student);
         if (s == null) {
             throw new RuntimeException("addStudentToCourse(): Студент не найден");
         }
         // Есть ли у нас такой курс в списке вообще
-        Course c = courses.findCourse(course);
+        Course c = courses.findCourse(courseId);
         if (c == null) {
             throw new RuntimeException("addStudentToCourse(): Курс не найден");
         }
@@ -59,14 +59,14 @@ public class Database {
     }
 
     // Удалить студента с курса
-    public void removeStudentFromCourse(String student, String course){
+    public void removeStudentFromCourse(String student, int courseId){
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(student);
         if (s == null) {
             throw new RuntimeException("removeStudentFromCourse(): Студент не найден");
         }
         // Есть ли у нас такой курс в списке вообще
-        Course c = courses.findCourse(course);
+        Course c = courses.findCourse(courseId);
         if (c == null) {
             throw new RuntimeException("removeStudentFromCourse(): Курс не найден");
         }
@@ -83,21 +83,21 @@ public class Database {
     }
 
     // Список студентов, посещающих конкретный курс
-    public void getCourseStudents(String name){
+    public void getCourseStudents(int courseId){
         // Смотрим есть ли у нас такой курс в списке вообще
-        Course c = courses.findCourse(name);
+        Course c = courses.findCourse(courseId);
         if (c == null) {
             throw new RuntimeException("getCourseStudents(): Курс не найден");
         }
         // Смотрим список студентов, если его нет => нет студентов на курсе
         Entity students = c.students;
         if (students == null) {
-            System.out.println("На курсе «" + c.name + "» нет студентов");
+            System.out.println("На курсе «" + c.id + "» нет студентов");
             return;
         }
 
         // Выводим студентов курса
-        System.out.println("Студенты курса «" + c.name + "»: ");
+        System.out.println("Студенты курса «" + c.id + "»: ");
         int i = 0;
         // Смотрим всех студентов: идем по связям до реального класса студента
         while (students.isRelation()) {
@@ -134,7 +134,7 @@ public class Database {
             while (course.isRelation())
                 course = ((Relation) course).course;
             // Вывели имя курса
-            System.out.println(++i + ") " + ((Course) course).name);
+            System.out.println(++i + ") " + ((Course) course).id);
             // Идем по следующей связи
             courses = ((Relation) courses).student;
         }
@@ -169,16 +169,16 @@ public class Database {
     }
 
     // Удалить всех студентов с курса
-    public void removeCourse(String name) {
+    public void removeCourse(int courseId) {
         // Смотрим есть ли у нас такой курс в списке вообще
-        Course c = courses.findCourse(name);
+        Course c = courses.findCourse(courseId);
         if (c == null) {
             throw new RuntimeException("removeCourse(): Курс не найден");
         }
         // Смотрим, есть ли уже какие-либо студенты на курсе?
         Entity students = c.students;
         if (students == null) {
-            System.out.println("На курсе «" + c.name + "» нет студентов");
+            System.out.println("На курсе «" + c.id + "» нет студентов");
             return;
         }
 

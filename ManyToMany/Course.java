@@ -2,11 +2,11 @@ package ManyToMany;
 
 public class Course extends Entity{
 
-    public String name;
+    public int id;
     public Relation students;
 
-    public Course(String name){
-        this.name = name;
+    public Course(int id){
+        this.id = id;
     }
 
     @Override

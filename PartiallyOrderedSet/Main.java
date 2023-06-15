@@ -18,7 +18,7 @@ public class Main {
             String line = scanner.nextLine();
             String input = line.trim();
             String[] parts = input.split("<");
-            set.addElement(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            set.addElements(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         }
 
         set.print();

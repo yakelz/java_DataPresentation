@@ -360,6 +360,9 @@ public class Set {
 
     // Присваивание нового множества
     public void Assign(Set input){
+        if (this == input) {
+            return;
+        }
         // Копирующий метод
         copySet(input);
     }

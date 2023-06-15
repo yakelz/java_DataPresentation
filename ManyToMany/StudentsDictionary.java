@@ -46,22 +46,23 @@ public class StudentsDictionary {
 
 
     // Вставить
-    public void insert(Student key) {
+    public void insert(String name) {
+
         // Если нет места в массиве
         if (!hasSpace()) {
             throw new RuntimeException("insert(): Нет места для вставки");
         }
 
         // Хэш индекс
-        int index = hashFunction(key.name.toCharArray());
+        int index = hashFunction(name.toCharArray());
 
         // Если объект другой - ищем свободное место
-        int space = findSpace(index, key.name);
+        int space = findSpace(index, name);
         if (space == -1) {
             return;
         }
         // Вставляем элемент
-        array[space] = key;
+        array[space] = new Student(name);
         size++;
     }
 
@@ -75,35 +76,27 @@ public class StudentsDictionary {
     private int findSpace(int startIndex, String input){
         int i = 0;
         int space = linearHashFunction(startIndex, ++i);
+        int deletedSpace = -1;
+
         while (array[space] != null) {
             // Пока ищем сразу же проверяем ячейки
             // Если находит одинаковый элемент - возвращает -1;
             if (array[space].name.equals(input)) {
                 return -1;
             }
-
             // Если место удалено, мы его сохраняем
             // и проходимся по оставшимся элементам,
             // чтобы убедиться, что такого элемента больше нет
-            if(array[space].name.equals(DELETED)) {
-                int deletedSpace = space;
-                while (array[space] != null) {
-                    // Если находит одинаковый элемент - возвращает -1;
-                    if (array[space].name.equals(input)) {
-                        return -1;
-                    }
-                    space = linearHashFunction(startIndex, ++i);
-                    // Если мы пришли обратно, то одинакового элемента нет
-                    // и можем вставлять в сохраненную (удаленную) ячейку
-                    if (space == startIndex) {
-                        return deletedSpace;
-                    }
-                }
+            if(deletedSpace == -1 && array[space].name.equals(DELETED)) {
+                deletedSpace = space;
             }
-            space = linearHashFunction(startIndex, ++i);
             if (space == startIndex) {
+                if (deletedSpace != -1) {
+                    return deletedSpace;
+                }
                 return -1;
             }
+            space = linearHashFunction(startIndex, ++i);
         }
         return space;
     }

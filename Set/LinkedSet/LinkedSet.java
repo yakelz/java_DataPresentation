@@ -324,6 +324,9 @@ public class LinkedSet {
 
     // Присваивание нового множества
     public void Assign(LinkedSet input){
+        if (this == input) {
+            return;
+        }
         //копирующий метод
         copySet(input);
     }

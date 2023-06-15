@@ -6,7 +6,7 @@ public class CoursesDictionary {
     // Массив символьных массивов
     public Course[] array;
     // Символ удаленного элемента
-    private final String DELETED = "0";
+    private final int DELETED = -1;
 
     // Размер массива
     private int size = 0;
@@ -24,12 +24,8 @@ public class CoursesDictionary {
 
     // Функция хеширования
     // Cумма кодов всех символов % 10
-    private int hashFunction(char[] input) {
-        int result = 0;
-        for (int i = 0; i < input.length; i++) {
-            result += input[i];
-        }
-        return result % CAPACITY;
+    private int hashFunction(int input) {
+        return input % CAPACITY;
     }
 
     // Линейный хэш индекс (следующее значение)
@@ -46,22 +42,23 @@ public class CoursesDictionary {
 
 
     // Вставить
-    public void insert(Course key) {
+    public void insert(int id) {
+
         // Если нет места в массиве
         if (!hasSpace()) {
             throw new RuntimeException("insert(): Нет места для вставки");
         }
 
         // Хэш индекс
-        int index = hashFunction(key.name.toCharArray());
+        int index = hashFunction(id);
 
         // Если объект другой - ищем свободное место
-        int space = findSpace(index, key.name);
+        int space = findSpace(index, id);
         if (space == -1) {
             return;
         }
         // Вставляем элемент
-        array[space] = key;
+        array[space] = new Course(id);
         size++;
     }
 
@@ -72,54 +69,47 @@ public class CoursesDictionary {
     // Если находит одинаковый элемент - возвращает -1;
     // Если места нет - возвращает -1;
     // Возвращает место для вставки
-    private int findSpace(int startIndex, String input){
+    private int findSpace(int startIndex, int input){
         int i = 0;
         int space = linearHashFunction(startIndex, ++i);
+        boolean deletedSpaceFound = false;
+        int deletedSpace = -1;
         while (array[space] != null) {
             // Пока ищем сразу же проверяем ячейки
             // Если находит одинаковый элемент - возвращает -1;
-            if (array[space].name.equals(input)) {
+            if (array[space].id == input) {
                 return -1;
             }
 
             // Если место удалено, мы его сохраняем
             // и проходимся по оставшимся элементам,
             // чтобы убедиться, что такого элемента больше нет
-            if(array[space].name.equals(DELETED)) {
-                int deletedSpace = space;
-                while (array[space] != null) {
-                    // Если находит одинаковый элемент - возвращает -1;
-                    if (array[space].name.equals(input)) {
-                        return -1;
-                    }
-                    space = linearHashFunction(startIndex, ++i);
-                    // Если мы пришли обратно, то одинакового элемента нет
-                    // и можем вставлять в сохраненную (удаленную) ячейку
-                    if (space == startIndex) {
-                        return deletedSpace;
-                    }
-                }
+            if(deletedSpace == -1 && array[space].id == DELETED) {
+                deletedSpace = space;
             }
-            space = linearHashFunction(startIndex, ++i);
             if (space == startIndex) {
+                if (deletedSpace != -1) {
+                    return deletedSpace;
+                }
                 return -1;
             }
+            space = linearHashFunction(startIndex, ++i);
         }
         return space;
     }
 
 
     // Удалить
-    public void delete(String input) {
+    public void delete(int input) {
 
         // Первый хэш индекс
-        int start = hashFunction(input.toCharArray());
+        int start = hashFunction(input);
 
         // Сразу удаляем если по хэш индексу находится нужный элемент
         // Проверяем, что ячейка не пустая и не удаленная
         // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && !array[start].name.equals(DELETED) && array[start].name.equals(input)) {
-            array[start].name = DELETED;
+        if (array[start] != null && array[start].id != DELETED && array[start].id == input) {
+            array[start].id = DELETED;
             size--;
             return;
         }
@@ -132,8 +122,8 @@ public class CoursesDictionary {
         while (array[next] != null) {
 
             // Если ячейка не удаленная, и это нужный элемент - удаляем
-            if (!array[next].name.equals(DELETED) && array[next].name.equals(input)) {
-                array[next].name = DELETED;
+            if (array[next].id != DELETED && array[next].id == input) {
+                array[next].id = DELETED;
                 size--;
                 return;
             }
@@ -150,14 +140,14 @@ public class CoursesDictionary {
         }
     }
 
-    public Course findCourse(String input) {
+    public Course findCourse(int input) {
         // Первый хэш индекс
-        int start = hashFunction(input.toCharArray());
+        int start = hashFunction(input);
 
         // Сразу true если по хэш индексу находится нужный элемент
         // Проверяем, что ячейка не пустая и не удаленная
         // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && !array[start].name.equals(DELETED) && array[start].name.equals(input)) {
+        if (array[start] != null && array[start].id != DELETED && array[start].id == input) {
             return array[start];
         }
 
@@ -169,7 +159,7 @@ public class CoursesDictionary {
         while (array[next] != null) {
 
             // Если ячейка не удаленная, и это нужный элемент - true
-            if (!array[next].name.equals(DELETED) && array[next].name.equals(input)) {
+            if (array[next].id != DELETED && array[next].id == input) {
                 return array[next];
             }
 
@@ -189,10 +179,10 @@ public class CoursesDictionary {
             System.out.print(i + ": ");
             if (array[i] == null) {
                 System.out.println("null");
-            } else if (array[i].name == DELETED) {
+            } else if (array[i].id == DELETED) {
                 System.out.println("DELETED");
             } else {
-                System.out.println(array[i].name);
+                System.out.println(array[i].id);
             }
         }
     }

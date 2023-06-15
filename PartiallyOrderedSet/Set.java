@@ -32,7 +32,14 @@ public class Set {
 
     // Добавить элемент в множество
     // Сразу принимает два значения (например: a<b; left = a; right = b)
-    public void addElement(int left, int right) {
+    public void addElements(int left, int right) {
+
+        // Если пришло два одинаковых значения, то добавляем только один из них
+        if (left == right) {
+            addElement(left);
+            return;
+        }
+
         Element h = head;
         Element leftEl = null;
         Element rightEl = null;
@@ -66,37 +73,69 @@ public class Set {
         rightEl.count++;
     }
 
+    //Если left = right -> то вызывается этот метод, который добавляет только один элемент
+    private void addElement(int input){
+        Element h = head;
+        Element inputEl = null;
+
+        // Смотрим, находятся ли значения в списке уже?
+        while (h != null) {
+            if (h.key == input) {
+                inputEl = h;
+            }
+            h = h.id;
+        }
+
+        //Если значение пустое (значит его нет в списке)
+        // => добавляем новый элемент
+        if (inputEl == null) {
+            head = new Element(input, head);
+            inputEl = head;
+        }
+    }
+
     public void sort() {
         // Создаем новый список
         // В который будем выставлять элементы в правильной последовательности
         Element newList = new Element(0, null);
         Element newHead = newList;
 
-        Element h = head;
-        while (h != null) {
-            if (h.count == 0) {
-                newHead.id = h;
-                newHead = newHead.id;
-                removeElement(h);
-                h = head;
-            } else
-                h = h.id;
-        }
+        findAndRemoveZeros(newHead);
         if (head != null) {
-            throw new RuntimeException("sort(): Не удалось найти элемент на который никто не ссылается");
+            throw new RuntimeException("sort(): Не удалось отсортировать");
         }
 
         newList = newList.id;
         head = newList;
     }
 
-    private void removeElement(Element input){
-        // Проходимся и убираем всем связи элемента
-        Trail start = input.next;
+    private void findAndRemoveZeros(Element newHead) {
+        Element h = head;
+        while (h != null) {
+            if (h.count == 0) {
+                //убрать хвост
+                newHead.id = h;
+                newHead = newHead.id;
+                //удалить элемент
+                removeElement(h);
+                h = head;
+            } else {
+                h = h.id;
+            }
+        }
+    }
+
+    // Удаление списка последователей для заданного элемента
+    private void removeSuccessors(Element element) {
+        Trail start = element.next;
         while (start != null) {
             start.id.count--;
             start = start.next;
         }
+    }
+
+    private void removeElement(Element input){
+        removeSuccessors(input);
 
         // Удаляем элемент из списка
         if (input == head) {

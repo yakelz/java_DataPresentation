@@ -22,17 +22,21 @@ public class Dictionary {
         array = new char[CAPACITY][];
     }
 
-    // Функция хеширования
-    // Cумма кодов всех символов % 10
-    private int hashFunction(char[] input) {
+    // Хэш значение в массиве
+    private int hashFunction(int hashCode) {
+        return hashCode % CAPACITY;
+    }
+
+    // Хэш значение
+    private int hashCode(char[] input) {
         int result = 0;
         for (int i = 0; i < input.length; i++) {
             result += input[i];
         }
-        return result % CAPACITY;
+        return result;
     }
 
-    // Линейный хэш индекс (следующее значение)
+    // Повторное хэширование
     private int linearHashFunction(int index, int i) {
         return (index + i) % CAPACITY;
     }
@@ -46,25 +50,33 @@ public class Dictionary {
 
 
     // Вставить
-    public void insert(String key) {
+    public void insert(char[] key) {
         // Если нет места в массиве
         if (!hasSpace()) {
             throw new RuntimeException("insert(): Нет места для вставки");
         }
 
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
+
+        int hashCode = hashCode(key);
         // Хэш индекс
-        int index = hashFunction(input);
+        int index = hashFunction(hashCode);
 
         // Если объект другой - ищем свободное место
-        int space = findSpace(index, input);
+        int space = findSpace(index, key);
         if (space == -1) {
             return;
         }
         // Вставляем элемент
-        array[space] = input;
+        array[space] = copyArray(key);
         size++;
+    }
+
+    private char[] copyArray(char[] input) {
+        char[] output = new char[input.length];
+        for (int i = 0; i < input.length; i++) {
+            output[i] = input[i];
+        }
+        return output;
     }
 
     // Нахождение свободного места
@@ -77,6 +89,8 @@ public class Dictionary {
     private int findSpace(int startIndex, char[] input){
         int i = 0;
         int space = linearHashFunction(startIndex, ++i);
+        int deletedSpace = -1;
+
         while (array[space] != null) {
             // Пока ищем сразу же проверяем ячейки
             // Если находит одинаковый элемент - возвращает -1;
@@ -87,27 +101,51 @@ public class Dictionary {
             // Если место удалено, мы его сохраняем
             // и проходимся по оставшимся элементам,
             // чтобы убедиться, что такого элемента больше нет
-            if(array[space][0] == DELETED) {
-                int deletedSpace = space;
-                while (array[space] != null) {
-                    // Если находит одинаковый элемент - возвращает -1;
-                    if (compareArrays(array[space], input)) {
-                        return -1;
-                    }
-                    space = linearHashFunction(startIndex, ++i);
-                    // Если мы пришли обратно, то одинакового элемента нет
-                    // и можем вставлять в сохраненную (удаленную) ячейку
-                    if (space == startIndex) {
-                        return deletedSpace;
-                    }
-                }
+            if(deletedSpace == -1 && array[space][0] == DELETED) {
+                deletedSpace = space;
             }
-            space = linearHashFunction(startIndex, ++i);
             if (space == startIndex) {
+                if (deletedSpace != -1) {
+                    return deletedSpace;
+                }
                 return -1;
             }
+            space = linearHashFunction(startIndex, ++i);
         }
         return space;
+    }
+
+    // Поиск элемента в массиве
+    private int findElement(char[] input) {
+        int hashCode = hashCode(input);
+        int start = hashFunction(hashCode);
+
+        if (array[start] != null && array[start][0] != DELETED && compareArrays(array[start], input)) {
+            return start;
+        }
+
+        // Следующий индекс после хэш индекса
+        int i = 0;
+        int next = linearHashFunction(start, ++i);
+
+        // Проходится до тех пор, пока не встретит пустую (Null) ячейку
+        while (array[next] != null) {
+
+            // Если ячейка не удаленная, и это нужный элемент - возвращает индекс
+            if (array[next][0] != DELETED && compareArrays(array[next], input)) {
+                return next;
+            }
+
+            //Следующий элемент
+            next = linearHashFunction(start, ++i);
+
+            // Вернулись к начальному индексу - элемент не найден
+            if (next == start) {
+                break;
+            }
+        }
+
+        return -1; // Элемент не найден
     }
 
     // По символьное сравнение массивов (для удаления элемента)
@@ -125,82 +163,19 @@ public class Dictionary {
     }
 
     // Удалить
-    public void delete(String key) {
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
-        // Первый хэш индекс
-        int start = hashFunction(input);
-
-        // Сразу удаляем если по хэш индексу находится нужный элемент
-        // Проверяем, что ячейка не пустая и не удаленная
-        // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && array[start][0] != DELETED && compareArrays(array[start], input)) {
-            array[start][0] = DELETED;
+    public void delete(char[] input) {
+        int index = findElement(input);
+        if (index != -1) {
+            array[index][0] = DELETED;
             size--;
-            return;
-        }
-
-        // Следующий индекс после хэш индекса
-        int i = 0;
-        int next = linearHashFunction(start, ++i);
-
-        // Проходится до тех пор, пока не встретит пустую (Null) ячейку
-        while (array[next] != null) {
-
-            // Если ячейка не удаленная, и это нужный элемент - удаляем
-            if (array[next][0] != DELETED && compareArrays(array[next], input)) {
-                array[next][0] = DELETED;
-                size--;
-                return;
-            }
-
-            //Следующий элемент
-            next = linearHashFunction(start, ++i);
-
-            // Вернулись к начальному индексу - элемент не найден
-            if (next == start) {
-                System.out.println("Элемент не найден");
-                break;
-            }
-
+        } else {
+            System.out.println("Элемент не найден");
         }
     }
 
-    public boolean member(String key) {
-        // Перевод String -> Char[]
-        char[] input = key.toCharArray();
-
-        // Первый хэш индекс
-        int start = hashFunction(input);
-
-        // Сразу true если по хэш индексу находится нужный элемент
-        // Проверяем, что ячейка не пустая и не удаленная
-        // И по символьно проверяем массив, чтобы убедится, что это нужный элемент
-        if (array[start] != null && array[start][0] != DELETED &&  compareArrays(array[start], input)) {
-            return true;
-        }
-
-        // Следующий индекс после хэш индекса
-        int i = 0;
-        int next = linearHashFunction(start, ++i);
-
-        // Проходится до тех пор, пока не встретит пустую (Null) ячейку
-        while (array[next] != null) {
-
-            // Если ячейка не удаленная, и это нужный элемент - true
-            if (array[next][0] != DELETED && compareArrays(array[next], input)) {
-                return true;
-            }
-
-            //Следующий элемент
-            next = linearHashFunction(start, ++i);
-
-            // Вернулись к начальному индексу - элемент не найден
-            if (next == start) {
-                break;
-            }
-        }
-        return false;
+    public boolean member(char[] input) {
+        int index = findElement(input);
+        return index != -1;
     }
 
     public void print() {
@@ -211,7 +186,12 @@ public class Dictionary {
             } else if (array[i][0] == DELETED) {
                 System.out.println("DELETED");
             } else {
-                System.out.println(array[i]);
+                for (int j = 0; j < array[i].length; j++) {
+                    if(array[i][j] != '\0') {
+                        System.out.print(array[i][j]);
+                    }
+                }
+                System.out.println();
             }
         }
     }

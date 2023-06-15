@@ -13,15 +13,15 @@ public class Main {
         s.courses.print();
         s.students.print();
         s.getStudentCourses("Леонид");
-        s.getCourseStudents("Программирование");
-        s.removeStudentFromCourse("Леонид", "Программирование");
+        s.getCourseStudents(1);
+        s.removeStudentFromCourse("Леонид", 1);
         s.getStudentCourses("Леонид");
-        s.getCourseStudents("Программирование");
+        s.getCourseStudents(1);
         s.removeStudent("Леонид");
         s.getStudentCourses("Леонид");
-        s.getCourseStudents("Математика");
-        s.removeCourse("Математика");
-        s.getCourseStudents("Математика");
+        s.getCourseStudents(2);
+        s.removeCourse(2);
+        s.getCourseStudents(2);
     }
 
     private static void init(Database s) {
@@ -37,9 +37,9 @@ public class Main {
                 String input = line.trim();
                 String[] parts = input.split(";");
 
-                s.students.insert(new Student(parts[0]));
-                s.courses.insert(new Course(parts[1]));
-                s.addStudentToCourse(parts[0], parts[1]);
+                s.students.insert(parts[0]);
+                s.courses.insert(Integer.parseInt(parts[1]));
+                s.addStudentToCourse(parts[0],Integer.parseInt(parts[1]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
