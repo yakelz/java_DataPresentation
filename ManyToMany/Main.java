@@ -12,13 +12,13 @@ public class Main {
         init(s);
         s.courses.print();
         s.students.print();
-        s.getStudentCourses("Леонид");
+        s.getStudentCourses("Леонид".toCharArray());
         s.getCourseStudents(1);
-        s.removeStudentFromCourse("Леонид", 1);
-        s.getStudentCourses("Леонид");
+        s.removeStudentFromCourse("Леонид".toCharArray(), 1);
+        s.getStudentCourses("Леонид".toCharArray());
         s.getCourseStudents(1);
-        s.removeStudent("Леонид");
-        s.getStudentCourses("Леонид");
+        s.removeStudent("Леонид".toCharArray());
+        s.getStudentCourses("Леонид".toCharArray());
         s.getCourseStudents(2);
         s.removeCourse(2);
         s.getCourseStudents(2);
@@ -37,9 +37,9 @@ public class Main {
                 String input = line.trim();
                 String[] parts = input.split(";");
 
-                s.students.insert(parts[0]);
+                s.students.insert(parts[0].toCharArray());
                 s.courses.insert(Integer.parseInt(parts[1]));
-                s.addStudentToCourse(parts[0],Integer.parseInt(parts[1]));
+                s.addStudentToCourse(parts[0].toCharArray(),Integer.parseInt(parts[1]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

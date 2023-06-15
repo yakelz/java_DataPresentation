@@ -10,7 +10,7 @@ public class Database {
     }
 
     // добавить студента на конкретный курс
-    public void addStudentToCourse(String student, int courseId){
+    public void addStudentToCourse(char[] student, int courseId){
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(student);
         if (s == null) {
@@ -23,43 +23,23 @@ public class Database {
         }
         Relation relation = new Relation(null, null);
 
-        // Если студент не подписан на никакие курсы
         if (s.courses == null) {
             relation.student = s;
-        }
-        // Если у него есть какие либо курсы
-        else {
-            //Смотрим, подписан ли он на конкретно этот курс
-            if (isStudentSubscribed(s,c)) {
-                // Если подписан, то добавлять его не нужно
-                return;
-            }
-            else {
-                relation.student = s.courses;
-            }
+        } else {
+            relation.student = s.courses;
         }
         s.courses = relation;
 
-        // Если у курса нет никаких студентов
         if (c.students == null) {
             relation.course = c;
-        }
-        // Если есть какие либо студенты
-        else {
-            //Смотрим, есть ли среди студентов уже этот студент
-            if (isCourseMember(s,c)) {
-                // Если студент уже на курсе, добавлять его не нужно
-                return;
-            }
-            else {
-                relation.course = c.students;
-            }
+        } else {
+            relation.course = c.students;
         }
         c.students = relation;
     }
 
     // Удалить студента с курса
-    public void removeStudentFromCourse(String student, int courseId){
+    public void removeStudentFromCourse(char[] student, int courseId){
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(student);
         if (s == null) {
@@ -72,7 +52,7 @@ public class Database {
         }
 
         // Если студент не является участником курса
-        if (!isStudentSubscribed(s, c) || !isCourseMember(s, c)) {
+        if (!isStudentSubscribed(s, c)) {
             System.out.println("Cтудент не является участником курса");
             return;
         }
@@ -105,15 +85,23 @@ public class Database {
             while (student.isRelation())
                 student = ((Relation) student).student;
             // Вывели имя студента
-            System.out.println(++i + ") " + ((Student) student).name);
+            System.out.println(++i + ") " + printArray(((Student) student).name));
             // Идем по следующей связи
             students = ((Relation) students).course;
         }
         System.out.println();
     }
 
+    private String printArray(char[] input){
+        String output = "";
+        for (int i = 0; i < input.length; i++) {
+            output += input[i];
+        }
+        return output;
+    }
+
     // Список всех курсов у студента
-    public void getStudentCourses(String name){
+    public void getStudentCourses(char[] name){
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(name);
         if (s == null) {
@@ -142,7 +130,7 @@ public class Database {
     }
 
     // Удалить студента со всех курсов (если студент, допустим, отчислился)
-    public void removeStudent(String name) {
+    public void removeStudent(char[] name) {
         // Смотрим, есть ли у нас такой студент в списке вообще
         Student s = students.findStudent(name);
         if (s == null) {
@@ -195,25 +183,6 @@ public class Database {
         }
     }
 
-    // Поиск записи о студенте "s" в списке студентов курса "c"
-    // Если запись найдена - true
-    // => студент уже является участником курса
-    private boolean isCourseMember (Student s, Course c) {
-        // Список студентов записанных на курс
-        Entity record = c.students;
-        // Смотрим всех студентов: идем по связям до реального класса студента
-        while (record.isRelation()) {
-            Entity student = record;
-            while (student.isRelation())
-                student = ((Relation) student).student;
-            // И проверяем, является ли этот студент участником курса?
-            if ((Student) student == s)
-                return true;
-            // Смотрим следующую связь
-            record = ((Relation) record).course;
-        }
-        return false;
-    }
 
     // Поиск записи о курсе "c" в списке курсов студента "s"
     // Если запись найдена - true
