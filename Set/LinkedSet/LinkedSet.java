@@ -71,45 +71,59 @@ public class LinkedSet {
 
         //Создаем новый общий список
         LinkedSet union = new LinkedSet();
+        Node unionTail = null;
 
         //Проходимся по обоим спискам одновременно
         while (currentHead != null && inputHead != null) {
+            Node newNode = null;
             // Если элементы равны, добавляем любой из них
             // И двигаемся дальше по двум спискам сразу
             if (currentHead.value == inputHead.value) {
-                union.add(currentHead.value);
-
+                newNode = new Node(currentHead.value, null);
                 currentHead = currentHead.next;
                 inputHead = inputHead.next;
-                continue;
             }
-
             // Если элемент из ПЕРВОГО списка меньше, чем элемент из ВТОРОГО списка,
             // то добавляем его в общий список и двигаемся дальше по ПЕРВОМУ списку
-            if (currentHead.value < inputHead.value) {
-                union.add(currentHead.value);
+            else if (currentHead.value < inputHead.value) {
+                newNode = new Node(currentHead.value, null);
                 currentHead = currentHead.next;
             }
             // Если элемент из ВТОРОГО списка меньше, чем элемент из ПЕРВОГО списка,
             // то добавляем его в общий список и двигаемся дальше по ВТОРОМУ списку
             else {
-                union.add(inputHead.value);
+                newNode = new Node(inputHead.value, null);
                 inputHead = inputHead.next;
+            }
+
+            if(union.head == null) {
+                union.head = newNode;
+                unionTail = newNode;
+            } else {
+                unionTail.next = newNode;
+                unionTail = newNode;
             }
         }
         //Проходимся по первому списку до конца
-        while (currentHead != null) {
-            union.add(currentHead.value);
-            currentHead = currentHead.next;
+        if(currentHead != null) {
+            unionTail = appendRemaining(currentHead, unionTail);
         }
 
         //Проходимся по второму списку до конца
-        while (inputHead != null) {
-            union.add(inputHead.value);
-            inputHead = inputHead.next;
+        if(inputHead != null) {
+            unionTail = appendRemaining(inputHead, unionTail);
         }
 
         return union;
+    }
+
+    private Node appendRemaining(Node start, Node unionTail) {
+        while (start != null) {
+            unionTail.next = new Node(start.value, null);
+            unionTail = unionTail.next;
+            start = start.next;
+        }
+        return unionTail;
     }
 
     // Возвращает множество общих элементов
@@ -121,116 +135,146 @@ public class LinkedSet {
             return new LinkedSet(input);
         }
 
+        // Если списки пустые -> возвращаем пустой список
+        if (head == null && input.head == null) {
+            return new LinkedSet();
+        }
+
         Node currentHead = head;
         Node inputHead = input.head;
 
         //Создаем новый общий список
-        LinkedSet intersect = new LinkedSet();
+        LinkedSet intersection = new LinkedSet();
+        Node intersectionTail = null;
 
-        //Проходимся по обоим спискам одновременно
         while (currentHead != null && inputHead != null) {
-            // Если элементы равны, добавляем любой из них
-            // И двигаемся дальше по двум спискам сразу
+            Node newNode = null;
             if (currentHead.value == inputHead.value) {
-                intersect.add(currentHead.value);
+                newNode = new Node(currentHead.value, null);
                 currentHead = currentHead.next;
                 inputHead = inputHead.next;
-                continue;
+            } else if (currentHead.value < inputHead.value) {
+                currentHead = currentHead.next;
+            } else {
+                inputHead = inputHead.next;
             }
 
-            // Двигаемся по первому списку
-            if (currentHead.value < inputHead.value) {
-                currentHead = currentHead.next;
-            }
-            // Двигаемся по второму списку
-            else {
-                inputHead = inputHead.next;
+            if (newNode != null) { // Нашли ли мы что добавить?
+                if (intersection.head == null) { // Добавляли ли мы уже что-то?
+                    intersection.head = newNode;
+                    intersectionTail = newNode;
+                } else {
+                    intersectionTail.next = newNode;
+                    intersectionTail = newNode;
+                }
             }
         }
 
-        return intersect;
+        return intersection;
     }
 
     //Возвращает множество с элементами которых нет в исходном множестве
     //Создать копию и Выбрасывать значения?
-    public LinkedSet Difference (LinkedSet input) {
-        //проверить this = input - return копию списка
+    public LinkedSet Difference(LinkedSet input) {
+        // Проверка на то, что это те же самые списки
         if (this == input) {
+            return new LinkedSet();
+        }
+        if (head == null) {
             return new LinkedSet(input);
         }
+        // Создаем новый связанный список для разности
+        LinkedSet difference = new LinkedSet();
+        Node differenceTail = null;
 
         Node currentHead = head;
         Node inputHead = input.head;
 
-
-        //Создаем новый список
-        LinkedSet difference = new LinkedSet();
-
-        //Проходимся по обоим спискам одновременно
-        while (currentHead != null && inputHead != null) {
-            // двигаемся по обоим
+        // Идем по двум связным спискам и заполняем новое множество
+        // Если значения одинаковые пропускаем, если разные, то добавляем в разность
+        while (inputHead != null) {
+            Node newNode = null;
             if (currentHead.value == inputHead.value) {
                 currentHead = currentHead.next;
                 inputHead = inputHead.next;
-                continue;
-            }
-
-            // двигаемся по первому
-            if (currentHead.value < inputHead.value) {
+            } else if (currentHead.value < inputHead.value) {
                 currentHead = currentHead.next;
-            }
-            // вставляем значение и двигаемся по второму
-            else {
-                difference.add(inputHead.value);
+            } else {
+                newNode = new Node(inputHead.value, null);
                 inputHead = inputHead.next;
             }
-        }
 
-        //Проходимся по второму списку до конца
-        while (inputHead != null) {
-            difference.add(inputHead.value);
-            inputHead = inputHead.next;
+            if (newNode != null) { // Нашли ли мы что добавить?
+                if (difference.head == null) { // Добавляли ли мы уже что-то?
+                    difference.head = newNode;
+                    differenceTail = newNode;
+                } else {
+                    differenceTail.next = newNode;
+                    differenceTail = newNode;
+                }
+            }
         }
-
         return difference;
     }
+
 
     // Возвращает множество с которым есть все неповторяющиеся элементы
     // Только если множества не пересекаются
 
     // Тот же самый Union только без проверки на одинаковые элементы
     public LinkedSet Merge(LinkedSet input){
+        // Проверить this = input -> return копию списка
+        if (this == input) {
+            return new LinkedSet(input);
+        }
+        // Если списки пустые -> возвращаем пустой список
+        if (head == null && input.head == null) {
+            return new LinkedSet();
+        }
+        // Если первый список пустой -> Возвращаем второй список
+        if (head == null) {
+            return new LinkedSet(input);
+        }
+        // Если второй список пустой -> Возвращаем первый список
+        if (input.head == null) {
+            return new LinkedSet(this);
+        }
+
         Node currentHead = head;
         Node inputHead = input.head;
 
         //Создаем новый общий список
         LinkedSet union = new LinkedSet();
+        Node unionTail = null;
 
         //Проходимся по обоим спискам одновременно
         while (currentHead != null && inputHead != null) {
-            // Если элемент из ПЕРВОГО списка меньше, чем элемент из ВТОРОГО списка,
-            // то добавляем его в общий список и двигаемся дальше по ПЕРВОМУ списку
+            Node newNode = null;
             if (currentHead.value < inputHead.value) {
-                union.add(currentHead.value);
+                newNode = new Node(currentHead.value, null);
                 currentHead = currentHead.next;
             }
-            // Если элемент из ВТОРОГО списка меньше, чем элемент из ПЕРВОГО списка,
-            // то добавляем его в общий список и двигаемся дальше по ВТОРОМУ списку
             else {
-                union.add(inputHead.value);
+                newNode = new Node(inputHead.value, null);
                 inputHead = inputHead.next;
+            }
+
+            if(union.head == null) {
+                union.head = newNode;
+                unionTail = newNode;
+            } else {
+                unionTail.next = newNode;
+                unionTail = newNode;
             }
         }
         //Проходимся по первому списку до конца
-        while (currentHead != null) {
-            union.add(currentHead.value);
-            currentHead = currentHead.next;
+        if(currentHead != null) {
+            unionTail = appendRemaining(currentHead, unionTail);
         }
 
         //Проходимся по второму списку до конца
-        while (inputHead != null) {
-            union.add(inputHead.value);
-            inputHead = inputHead.next;
+        if(inputHead != null) {
+            unionTail = appendRemaining(inputHead, unionTail);
         }
 
         return union;
@@ -264,20 +308,9 @@ public class LinkedSet {
         }
         return true;
     }
-
-    // Вставка значения в множество
-    // Используется когда пользователь в ручную добавляет элементы
+    
+    // Когда добавляем элементы одного списка в созданный общий список
     public void Insert(int value) {
-        if (isMember(value)) {
-            return;
-        }
-        add(value);
-    }
-
-    // Используется в Union(), Difference(), Intersection(),
-    // когда добавляем элементы одного списка в созданный общий список
-    // без внутренней проверки есть ли такое значение уже в списке
-    public void add(int value) {
         //Если список пустой, тогда value становится головой списка
         if (head == null) {
             head = new Node(value, null);
@@ -288,10 +321,19 @@ public class LinkedSet {
             head = new Node(value, head);
             return;
         }
+        // Если значение равно голове, ничего не делаем
+        if (value == head.value) {
+            return;
+        }
         //Ищем место для вставки
         Node h = head;
         while (h.next != null && h.next.value < value) {
             h = h.next;
+        }
+
+        //Проверка на наличие элемента в списке. Если он уже есть, просто выходим из метода
+        if (h.next != null && h.next.value == value) {
+            return;
         }
 
         //Вставляем

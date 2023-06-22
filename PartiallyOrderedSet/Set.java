@@ -15,13 +15,13 @@ public class Set {
 
     private class Trail {
         // Ссылка на элемент, который имеет связь с исходным
-        public Element id;
+        public Element next;
         // Ссылка на следующий такой же элемент
-        public Trail next;
+        public Trail trail;
 
         public Trail(Element next, Trail trail) {
-            this.id = next;
-            this.next = trail;
+            this.next = next;
+            this.trail = trail;
         }
     }
     Element head;
@@ -33,12 +33,6 @@ public class Set {
     // Добавить элемент в множество
     // Сразу принимает два значения (например: a<b; left = a; right = b)
     public void addElements(int left, int right) {
-
-        // Если пришло два одинаковых значения, то добавляем только один из них
-        if (left == right) {
-            addElement(left);
-            return;
-        }
 
         Element h = head;
         Element leftEl = null;
@@ -52,7 +46,7 @@ public class Set {
             if (h.key == right) {
                 rightEl = h;
             }
-            h = h.id;
+            h = h.next;
         }
 
         //Если значение пустое (значит его нет в списке)
@@ -68,30 +62,9 @@ public class Set {
         }
 
         // Сразу в левый элемент вписываем связь с правым
-        leftEl.next = new Trail(rightEl, leftEl.next);
+        leftEl.trail = new Trail(rightEl, leftEl.trail);
         // И у правого элемента увеличиваем кол-во ссылающихся на него элементов
         rightEl.count++;
-    }
-
-    //Если left = right -> то вызывается этот метод, который добавляет только один элемент
-    private void addElement(int input){
-        Element h = head;
-        Element inputEl = null;
-
-        // Смотрим, находятся ли значения в списке уже?
-        while (h != null) {
-            if (h.key == input) {
-                inputEl = h;
-            }
-            h = h.id;
-        }
-
-        //Если значение пустое (значит его нет в списке)
-        // => добавляем новый элемент
-        if (inputEl == null) {
-            head = new Element(input, head);
-            inputEl = head;
-        }
     }
 
     public void sort() {
@@ -100,54 +73,53 @@ public class Set {
         Element newList = new Element(0, null);
         Element newHead = newList;
 
-        findAndRemoveZeros(newHead);
-        if (head != null) {
-            throw new RuntimeException("sort(): Не удалось отсортировать");
+        while (head != null) {
+            Element deleteNode;
+            if (head.count == 0) {
+                deleteNode = head;
+                head = head.next;
+                removeSuccessors(deleteNode);
+            } else {
+                Element prevFromZero = findZeroPrev();
+                if (prevFromZero == null) {
+                    throw new RuntimeException("sort(): Не удалось отсортировать");
+                }
+                deleteNode = prevFromZero.next;
+                prevFromZero.next = deleteNode.next;
+                removeSuccessors(deleteNode);
+            }
+            // добавляем обработанный элемент в конец нового списка
+            newHead.next = deleteNode;
+            newHead = newHead.next;
         }
 
-        newList = newList.id;
+        newList = newList.next;
         head = newList;
     }
 
-    private void findAndRemoveZeros(Element newHead) {
+    private Element findZeroPrev(){
+        Element prev = head;
         Element h = head;
         while (h != null) {
             if (h.count == 0) {
-                //убрать хвост
-                newHead.id = h;
-                newHead = newHead.id;
-                //удалить элемент
-                removeElement(h);
-                h = head;
-            } else {
-                h = h.id;
+                return prev;
             }
+            prev = h;
+            h = h.next;
         }
+        return null;
     }
+
 
     // Удаление списка последователей для заданного элемента
-    private void removeSuccessors(Element element) {
-        Trail start = element.next;
+    private void removeSuccessors(Element input){
+        Trail start = input.trail;
         while (start != null) {
-            start.id.count--;
-            start = start.next;
+            start.next.count--;
+            start = start.trail;
         }
-    }
-
-    private void removeElement(Element input){
-        removeSuccessors(input);
-
-        // Удаляем элемент из списка
-        if (input == head) {
-            head = head.id;
-        } else {
-            // get prev
-            Element h = head;
-            while (h.id != input) {
-                h = h.id;
-            }
-            h.id = input.id;
-        }
+        input.next = null;
+        input.trail = null;
     }
 
     public void print() {
@@ -155,12 +127,12 @@ public class Set {
         Trail trail;
         while (h != null) {
             System.out.print(h.key + "[" + h.count + "] - ");
-            trail = h.next;
+            trail = h.trail;
             while (trail != null) {
-                System.out.print(trail.id.key + " ");
-                trail = trail.next;
+                System.out.print(trail.next.key + " ");
+                trail = trail.trail;
             }
-            h = h.id;
+            h = h.next;
             System.out.println();
         }
 

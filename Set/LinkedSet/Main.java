@@ -8,13 +8,18 @@ public class Main {
         a.Insert(11);
         a.Insert(23);
         a.Insert(1);
+        a.Insert(1);
+        a.Insert(1);
+        a.Insert(23);
+
         a.Print();
-        System.out.println(a.Member(64));
 
         LinkedSet b = new LinkedSet();
         b.Insert(4);
         b.Insert(3);
         b.Insert(2);
+        b.Insert(1);
+        b.Insert(1);
         b.Insert(1);
         b.Insert(23);
 

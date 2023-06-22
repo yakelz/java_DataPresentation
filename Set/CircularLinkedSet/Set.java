@@ -288,15 +288,8 @@ public class Set {
 
     }
 
-    public void Insert(int value) {
-        if (isMember(value)) {
-            return;
-        }
-        add(value);
-    }
-
     // Вставка значения в множество
-    private void add(int value){
+    public void Insert(int value){
         // Если tail = null (список пустой)
             // Добавляем просто элемент
         if (isEmpty()) {
@@ -319,7 +312,11 @@ public class Set {
         //Проходимся по списку и ищем нужную позицию
             // Если элемент > чем head.value
                 //добавляем элемент
-        while (current != tail && value > current.value) {
+        while (current != tail && value >= current.value) {
+            // Если значение уже есть в списке, не вставляем его снова
+            if (value == current.value) {
+                return;
+            }
             prev = current;
             current = current.next;
         }
