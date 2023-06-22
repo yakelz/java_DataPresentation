@@ -37,11 +37,6 @@ public class StudentsDictionary {
     }
 
 
-    // Линейный хэш индекс (следующее значение)
-    private int linearHashFunction(int index, int i) {
-        return (index + i) % CAPACITY;
-    }
-
     // Проверяет, есть ли свободное место в массиве
     private boolean hasSpace(){
         // Если размер массива == вместимости
@@ -89,7 +84,7 @@ public class StudentsDictionary {
     // Возвращает место для вставки
     private int findSpace(int startIndex, char[] input){
         int i = 0;
-        int space = linearHashFunction(startIndex, ++i);
+        int space = hashFunction(startIndex + ++i);
         int deletedSpace = -1;
 
         while (array[space] != null) {
@@ -110,7 +105,7 @@ public class StudentsDictionary {
                 }
                 return -1;
             }
-            space = linearHashFunction(startIndex, ++i);
+            space = hashFunction(startIndex + ++i);
         }
         return space;
     }
@@ -140,7 +135,7 @@ public class StudentsDictionary {
 
         // Следующий индекс после хэш индекса
         int i = 0;
-        int next = linearHashFunction(start, ++i);
+        int next = hashFunction(start + ++i);
 
         // Проходится до тех пор, пока не встретит пустую (Null) ячейку
         while (array[next] != null) {
@@ -151,7 +146,7 @@ public class StudentsDictionary {
             }
 
             //Следующий элемент
-            next = linearHashFunction(start, ++i);
+            next = hashFunction(start + ++i);
 
             // Вернулись к начальному индексу - элемент не найден
             if (next == start) {

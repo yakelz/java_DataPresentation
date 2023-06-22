@@ -62,7 +62,6 @@ public class Dictionary {
     // Вставить
     public void insert(char[] input) {
         int hashCode = hashCode(input);
-        // Хэш индекс
         int index = hashFunction(hashCode);
         // Если элемент массива пустой, тогда сразу вставляем
         if(array[index] == null) {
@@ -78,7 +77,7 @@ public class Dictionary {
             }
             h = h.next;
         }
-        // Вставляю в голову новый элемент
+        // Вставляю новый элемент
         Node newNode = new Node(copyArray(input), array[index]);
         array[index] = newNode;
     }

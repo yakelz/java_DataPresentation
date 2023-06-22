@@ -1,7 +1,7 @@
 package Dictionary;
 
-//import Dictionary.ClosedHash.Dictionary;
-import Dictionary.OpenHash.Dictionary;
+import Dictionary.ClosedHash.Dictionary;
+//import Dictionary.OpenHash.Dictionary;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;

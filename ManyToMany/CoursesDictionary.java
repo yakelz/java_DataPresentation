@@ -28,10 +28,6 @@ public class CoursesDictionary {
         return input % CAPACITY;
     }
 
-    // Линейный хэш индекс (следующее значение)
-    private int linearHashFunction(int index, int i) {
-        return (index + i) % CAPACITY;
-    }
 
     // Проверяет, есть ли свободное место в массиве
     private boolean hasSpace(){
@@ -71,7 +67,7 @@ public class CoursesDictionary {
     // Возвращает место для вставки
     private int findSpace(int startIndex, int input){
         int i = 0;
-        int space = linearHashFunction(startIndex, ++i);
+        int space = hashFunction(startIndex + ++i);
         boolean deletedSpaceFound = false;
         int deletedSpace = -1;
         while (array[space] != null) {
@@ -93,7 +89,7 @@ public class CoursesDictionary {
                 }
                 return -1;
             }
-            space = linearHashFunction(startIndex, ++i);
+            space = hashFunction(startIndex + ++i);
         }
         return space;
     }
@@ -116,7 +112,7 @@ public class CoursesDictionary {
 
         // Следующий индекс после хэш индекса
         int i = 0;
-        int next = linearHashFunction(start, ++i);
+        int next = hashFunction(start + ++i);
 
         // Проходится до тех пор, пока не встретит пустую (Null) ячейку
         while (array[next] != null) {
@@ -129,7 +125,7 @@ public class CoursesDictionary {
             }
 
             //Следующий элемент
-            next = linearHashFunction(start, ++i);
+            next = hashFunction(start + ++i);
 
             // Вернулись к начальному индексу - элемент не найден
             if (next == start) {
@@ -153,7 +149,7 @@ public class CoursesDictionary {
 
         // Следующий индекс после хэш индекса
         int i = 0;
-        int next = linearHashFunction(start, ++i);
+        int next = hashFunction(start + ++i);
 
         // Проходится до тех пор, пока не встретит пустую (Null) ячейку
         while (array[next] != null) {
@@ -164,7 +160,7 @@ public class CoursesDictionary {
             }
 
             //Следующий элемент
-            next = linearHashFunction(start, ++i);
+            next = hashFunction(start + ++i);
 
             // Вернулись к начальному индексу - элемент не найден
             if (next == start) {
