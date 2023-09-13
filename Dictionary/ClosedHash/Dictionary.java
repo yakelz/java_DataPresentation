@@ -4,7 +4,7 @@ public class Dictionary {
     // Вместимость массива по умолчанию
     private int CAPACITY = 10;
     // Массив символьных массивов
-    public char[][] array;
+    private char[][] array;
     // Символ удаленного элемента
     private final char DELETED = '0';
 

@@ -65,7 +65,7 @@ public class Dictionary {
         int index = hashFunction(hashCode);
         // Если элемент массива пустой, тогда сразу вставляем
         if(array[index] == null) {
-            array[index] = new Node(input, null);
+            array[index] = new Node(copyArray(input), null);
             return;
         }
         // Ищем свободное место для вставки

@@ -2,27 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8fadabf6-80ca-4a5c-bd81-2119c08aaab4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PartiallyOrderedSet/Set.java" beforeDir="false" afterPath="$PROJECT_DIR$/PartiallyOrderedSet/Set.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Set/CircularLinkedSet/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Set/CircularLinkedSet/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Set/CircularLinkedSet/Set.java" beforeDir="false" afterPath="$PROJECT_DIR$/Set/CircularLinkedSet/Set.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Set/LinkedSet/LinkedSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/Set/LinkedSet/LinkedSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Set/LinkedSet/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Set/LinkedSet/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/ClosedHash/Dictionary.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/ClosedHash/Dictionary.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/OpenHash/Dictionary$Node.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/OpenHash/Dictionary$Node.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/OpenHash/Dictionary.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/Dictionary/OpenHash/Dictionary.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/CoursesDictionary.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/CoursesDictionary.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/Student.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/StudentsDictionary.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/ManyToMany/StudentsDictionary.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/java_DataPresentation/PartiallyOrderedSet/Set.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/java_DataPresentation/PartiallyOrderedSet/Set.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dictionary/ClosedHash/Dictionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dictionary/ClosedHash/Dictionary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dictionary/OpenHash/Dictionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dictionary/OpenHash/Dictionary.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +84,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687420615128</updated>
-      <workItem from="1687420616577" duration="7112000" />
+      <workItem from="1687420616577" duration="7288000" />
+      <workItem from="1688040113649" duration="8618000" />
     </task>
     <servers />
   </component>
